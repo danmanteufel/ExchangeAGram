@@ -253,6 +253,14 @@ class FilterViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
 }
 
+//MARK: - ProfileViewController
+class ProfileViewController: UIViewController {
+    
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    
+}
+
 //MARK: - FeedCell
 class FeedCell: UICollectionViewCell {
     
