@@ -254,10 +254,41 @@ class FilterViewController: UIViewController, UICollectionViewDataSource, UIColl
 }
 
 //MARK: - ProfileViewController
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, FBLoginViewDelegate {
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var fbLoginView: FBLoginView!
+    
+    //MARK: Flow Functions
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fbLoginView.readPermissions = ["public_profile", "publish_actions"]
+    }
+    
+    //MARK: FBLoginViewDelegate
+    func loginViewShowingLoggedInUser(loginView: FBLoginView!) {
+        profileImageView.hidden = false
+        nameLabel.hidden = false
+    }
+    
+    func loginViewFetchedUserInfo(loginView: FBLoginView!, user: FBGraphUser!) {
+        println(user)
+        nameLabel.text = user.name
+        let userImageURL = "https://graph.facebook.com/\(user.objectID)" +
+                           "/picture?type=small"
+        let url = NSURL(string: userImageURL)
+        profileImageView.image = UIImage(data: NSData(contentsOfURL: url!)!)
+    }
+    
+    func loginViewShowingLoggedOutUser(loginView: FBLoginView!) {
+        profileImageView.hidden = true
+        nameLabel.hidden = true
+    }
+    
+    func loginView(loginView: FBLoginView!, handleError error: NSError!) {
+        println("Error: \(error.localizedDescription)")
+    }
     
 }
 
