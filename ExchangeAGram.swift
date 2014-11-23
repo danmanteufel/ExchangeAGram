@@ -202,6 +202,55 @@ class FilterViewController: UIViewController, UICollectionViewDataSource, UIColl
         return UIImage(CGImage: cgImage)!//UIImage(CIImage: filteredImage)! would make it crappy
     }
     
+    func createUIAlertController(indexPath: NSIndexPath) {
+        let alert = UIAlertController(title: "Photo Options",
+                                      message: "Please choose an option",
+                                      preferredStyle: .Alert)
+        alert.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.placeholder = "Add Caption"
+            textField.secureTextEntry = false
+        }
+        let textField = alert.textFields![0] as UITextField
+        let photoAction = UIAlertAction(title: "Post Photo to Facebook with Caption",
+                                        style: .Destructive) { (UIAlertAction) -> Void in
+                                            self.shareToFacebook(indexPath)
+                                            let text = textField.text
+                                            self.saveFilterToCoreData(indexPath, caption: text)}
+        alert.addAction(photoAction)
+        let saveFilterAction = UIAlertAction(title: "Save Filter",
+                                             style: .Default) { (UIAlertAction) -> Void in
+                                                let text = textField.text
+                                                self.saveFilterToCoreData(indexPath, caption: text)}
+        alert.addAction(saveFilterAction)
+        let cancelAction = UIAlertAction(title: "Select Another Filter",
+                                         style: .Cancel) { (UIAlertAction) -> Void in }
+        alert.addAction(cancelAction)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func saveFilterToCoreData(indexPath: NSIndexPath, caption: String) {
+        let filterImage = filteredImageFromImage(thisFeedItem.image, withFilter: filters[indexPath.item])
+        thisFeedItem.image = UIImageJPEGRepresentation(filterImage, 1.0)
+        thisFeedItem.thumbnail = UIImageJPEGRepresentation(filterImage, kThumbnailCompression)
+        thisFeedItem.caption = caption
+        appDelegate.saveContext()
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func shareToFacebook(indexPath: NSIndexPath) {
+        let filterImage = filteredImageFromImage(thisFeedItem.image, withFilter: filters[indexPath.item])
+        let photos: NSArray = [filterImage]
+        var params = FBPhotoParams()
+        params.photos = photos
+        FBDialogs.presentShareDialogWithPhotoParams(params, clientState: nil) { (call, result, error) -> Void in
+                                                        if (result != nil) {
+                                                            println(result)
+                                                        } else {
+                                                            println(error)
+                                                        }
+        }
+    }
+    
     //MARK: UICollectionViewDataSource
     func collectionView(collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -224,11 +273,7 @@ class FilterViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     //MARK: UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let filterImage = filteredImageFromImage(thisFeedItem.image, withFilter: filters[indexPath.item])
-        thisFeedItem.image = UIImageJPEGRepresentation(filterImage, 1.0)
-        thisFeedItem.thumbnail = UIImageJPEGRepresentation(filterImage, kThumbnailCompression)
-        appDelegate.saveContext()
-        navigationController?.popViewControllerAnimated(true)
+        createUIAlertController(indexPath)
     }
     
     //MARK: Caching Functions
