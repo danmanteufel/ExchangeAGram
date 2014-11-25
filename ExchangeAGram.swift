@@ -9,15 +9,22 @@
 import UIKit
 import MobileCoreServices
 import CoreData
+import MapKit
 
 //MARK: - FeedViewController
-class FeedViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class FeedViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate {
 
     //MARK: Properties
     @IBOutlet weak var collectionView: UICollectionView!
     var feedArray: [AnyObject] = [] //Manually implementing the FetchResultsController functionality
+    var locationManager: CLLocationManager!
     
     //MARK: Flow Functions
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupLocationManager()
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         let request = NSFetchRequest(entityName: "FeedItem")
@@ -66,7 +73,6 @@ class FeedViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func collectionView(collectionView: UICollectionView,
                         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        
         var cell: FeedCell = collectionView.dequeueReusableCellWithReuseIdentifier("Feed Cell", forIndexPath: indexPath) as FeedCell
         let thisItem = feedArray[indexPath.item] as FeedItem
         
@@ -99,11 +105,29 @@ class FeedViewController: UIViewController, UICollectionViewDataSource, UICollec
         feedItem.image = imageData
         feedItem.caption = "Test"
         feedItem.thumbnail = thumbnailData
+        feedItem.latitude = locationManager.location.coordinate.latitude
+        feedItem.longitude = locationManager.location.coordinate.longitude
         appDelegate.saveContext()
         
         feedArray.append(feedItem)
         dismissViewControllerAnimated(true, completion: nil)
         collectionView.reloadData()
+    }
+    
+    //MARK: CLLocationManagerDelegate
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        println("locations = \(locations)")
+    }
+    
+    //MARK: Helper Functions
+    func setupLocationManager() {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        
+        locationManager.distanceFilter = 100.0
+        locationManager.startUpdatingLocation()
     }
     
 }
@@ -311,9 +335,12 @@ class ProfileViewController: UIViewController, FBLoginViewDelegate {
         fbLoginView.readPermissions = ["public_profile", "publish_actions"]
     }
     
+    @IBAction func mapViewButtonPressed(sender: UIButton) {
+    }
+    
     //MARK: FBLoginViewDelegate
     func loginViewShowingLoggedInUser(loginView: FBLoginView!) {
-        profileImageView.hidden = false
+        //profileImageView.hidden = false
         nameLabel.hidden = false
     }
     
@@ -327,12 +354,54 @@ class ProfileViewController: UIViewController, FBLoginViewDelegate {
     }
     
     func loginViewShowingLoggedOutUser(loginView: FBLoginView!) {
-        profileImageView.hidden = true
+        //profileImageView.hidden = true
         nameLabel.hidden = true
     }
     
     func loginView(loginView: FBLoginView!, handleError error: NSError!) {
         println("Error: \(error.localizedDescription)")
+    }
+    
+}
+
+//MARK: - MapViewController
+class MapViewController: UIViewController {
+    
+    let kLatitudeDelta = 0.05
+    let kLongitudeDelta = 0.05
+    
+    @IBOutlet weak var mapView: MKMapView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let request = NSFetchRequest(entityName: "FeedItem")
+        var error: NSError?
+        let itemArray = moc?.executeFetchRequest(request, error: &error)
+        if itemArray!.count > 0 {
+            for item in itemArray! {
+                let location = CLLocationCoordinate2D(latitude: Double(item.latitude), longitude: Double(item.longitude))
+                let span = MKCoordinateSpanMake(kLatitudeDelta, kLongitudeDelta)
+                let region = MKCoordinateRegionMake(location, span)
+                mapView.setRegion(region, animated: true)
+                
+                let annotation = MKPointAnnotation()
+                annotation.setCoordinate(location)
+                annotation.title = item.caption
+                mapView.addAnnotation(annotation)
+            }
+        }
+        
+//        let location = CLLocationCoordinate2D(latitude: 48.868639224587, longitude: 2.37119161036255)
+//        let span = MKCoordinateSpanMake(0.05, 0.05)
+//        let region = MKCoordinateRegionMake(location, span)
+//        mapView.setRegion(region, animated: true)
+//        
+//        let annotation = MKPointAnnotation()
+//        annotation.setCoordinate(location)
+//        annotation.title = "Canal Saint-Martin"
+//        annotation.subtitle = "Paris"
+//        mapView.addAnnotation(annotation)
     }
     
 }
