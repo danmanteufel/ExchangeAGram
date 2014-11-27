@@ -23,6 +23,7 @@ class FeedViewController: UIViewController, UICollectionViewDataSource, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLocationManager()
+        view.backgroundColor = UIColor(patternImage: UIImage(named: "AutumnBackground")!)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -76,7 +77,13 @@ class FeedViewController: UIViewController, UICollectionViewDataSource, UICollec
         var cell: FeedCell = collectionView.dequeueReusableCellWithReuseIdentifier("Feed Cell", forIndexPath: indexPath) as FeedCell
         let thisItem = feedArray[indexPath.item] as FeedItem
         
-        cell.imageView.image = UIImage(data: thisItem.image)
+        var displayImage = UIImage(data: thisItem.image)
+                            
+        if Bool(thisItem.filtered) {
+            displayImage = UIImage(CGImage: displayImage?.CGImage, scale: 1.0, orientation: .Right)
+        }
+                            
+        cell.imageView.image = displayImage
         cell.captionLabel.text = thisItem.caption
                             
         return cell
@@ -107,6 +114,8 @@ class FeedViewController: UIViewController, UICollectionViewDataSource, UICollec
         feedItem.thumbnail = thumbnailData
         feedItem.latitude = locationManager.location.coordinate.latitude
         feedItem.longitude = locationManager.location.coordinate.longitude
+        feedItem.uniqueID = NSUUID().UUIDString
+        feedItem.filtered = false
         appDelegate.saveContext()
         
         feedArray.append(feedItem)
@@ -257,6 +266,7 @@ class FilterViewController: UIViewController, UICollectionViewDataSource, UIColl
         thisFeedItem.image = UIImageJPEGRepresentation(filterImage, 1.0)
         thisFeedItem.thumbnail = UIImageJPEGRepresentation(filterImage, kThumbnailCompression)
         thisFeedItem.caption = caption
+        thisFeedItem.filtered = true
         appDelegate.saveContext()
         navigationController?.popViewControllerAnimated(true)
     }
@@ -302,7 +312,7 @@ class FilterViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     //MARK: Caching Functions
     func cacheImage(imageNumber: Int) {
-        let fileName = "\(imageNumber)"
+        let fileName = "\(thisFeedItem.uniqueID)\(imageNumber)"
         let uniquePath = tmp.stringByAppendingPathComponent(fileName)
         if !NSFileManager.defaultManager().fileExistsAtPath(uniquePath) {
             let data = self.thisFeedItem.thumbnail
@@ -313,12 +323,12 @@ class FilterViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func getCachedImage(imageNumber: Int) -> UIImage {
-        let fileName = "\(imageNumber)"
+        let fileName = "\(thisFeedItem.uniqueID)\(imageNumber)"
         let uniquePath = tmp.stringByAppendingPathComponent(fileName)
         if !NSFileManager.defaultManager().fileExistsAtPath(uniquePath) {
             cacheImage(imageNumber)
         }
-        return UIImage(contentsOfFile: uniquePath)!
+        return UIImage(CGImage: UIImage(contentsOfFile: uniquePath)?.CGImage, scale: 1.0, orientation: .Right)!
     }
 }
 
