@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ct0-ns-KdG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ct0-ns-KdG">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Feed View Controller-->
@@ -16,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lFc-8S-LOy">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lFc-8S-LOy">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Hqn-ku-LbE">
@@ -58,6 +59,13 @@
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="lFc-8S-LOy" secondAttribute="bottom" id="Nz7-K1-Zqf"/>
+                            <constraint firstItem="lFc-8S-LOy" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-64" id="U2Y-Le-3pd"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lFc-8S-LOy" secondAttribute="trailing" constant="-16" id="byI-cf-z6v"/>
+                            <constraint firstItem="lFc-8S-LOy" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="nmB-2t-Nbf"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="lFc-8S-LOy" secondAttribute="bottom" id="vRP-Wz-ugN"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="o4Y-Eh-uIi">
                         <barButtonItem key="leftBarButtonItem" systemItem="action" id="uxy-ga-B2l">
@@ -91,17 +99,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="PlaceHolderImage" translatesAutoresizingMaskIntoConstraints="NO" id="nMr-jF-XJQ">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PlaceHolderImage" translatesAutoresizingMaskIntoConstraints="NO" id="nMr-jF-XJQ">
                                 <rect key="frame" x="16" y="72" width="158" height="158"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="158" id="6Np-Vb-Pdf"/>
+                                    <constraint firstAttribute="height" constant="158" id="z11-VO-pvE"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kln-Y4-Aql">
-                                <rect key="frame" x="279" y="144" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kln-Y4-Aql">
+                                <rect key="frame" x="279" y="144" width="42" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGx-DB-d4w">
-                                <rect key="frame" x="4" y="258" width="182" height="102"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGx-DB-d4w">
+                                <rect key="frame" x="44" y="258" width="102" height="102"/>
                                 <state key="normal" image="MapIcon">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -110,15 +122,32 @@
                                     <segue destination="9xE-6R-oLG" kind="show" identifier="Map Segue" id="qmM-Id-wdH"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VUR-5z-FbX" customClass="FBLoginView">
-                                <rect key="frame" x="16" y="388" width="200" height="50"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VUR-5z-FbX" customClass="FBLoginView">
+                                <rect key="frame" x="-5" y="394" width="200" height="50"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="TRP-k7-9Nn"/>
+                                    <constraint firstAttribute="width" constant="200" id="xXS-j3-pp8"/>
+                                </constraints>
+                                <variation key="heightClass=compact-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="172" y="284" width="200" height="50"/>
+                                </variation>
                                 <connections>
                                     <outlet property="delegate" destination="KL1-D8-fbL" id="gXg-lp-fc5"/>
                                 </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="nMr-jF-XJQ" firstAttribute="leading" secondItem="jFM-Pa-fxT" secondAttribute="leadingMargin" id="Czn-u2-L2b"/>
+                            <constraint firstItem="MGx-DB-d4w" firstAttribute="top" secondItem="nMr-jF-XJQ" secondAttribute="bottom" constant="28" id="JIj-xO-vIM"/>
+                            <constraint firstItem="nMr-jF-XJQ" firstAttribute="top" secondItem="jFM-Pa-fxT" secondAttribute="topMargin" constant="72" id="fqJ-NI-bZ8"/>
+                            <constraint firstItem="MGx-DB-d4w" firstAttribute="centerX" secondItem="nMr-jF-XJQ" secondAttribute="centerX" id="glX-h2-vTM"/>
+                            <constraint firstItem="VUR-5z-FbX" firstAttribute="centerX" secondItem="MGx-DB-d4w" secondAttribute="centerX" id="nJ7-pt-XES"/>
+                            <constraint firstItem="nMr-jF-XJQ" firstAttribute="centerY" secondItem="kln-Y4-Aql" secondAttribute="centerY" constant="-3.5" id="o1b-96-QLS"/>
+                            <constraint firstItem="kln-Y4-Aql" firstAttribute="leading" secondItem="nMr-jF-XJQ" secondAttribute="trailing" constant="105" id="wtR-he-KWx"/>
+                            <constraint firstItem="VUR-5z-FbX" firstAttribute="top" secondItem="MGx-DB-d4w" secondAttribute="bottom" constant="34" id="yc3-0p-NHc"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="fbLoginView" destination="VUR-5z-FbX" id="9w1-hh-VVv"/>
@@ -142,11 +171,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="G7o-jY-7Ut">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="G7o-jY-7Ut">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="G7o-jY-7Ut" firstAttribute="leading" secondItem="nyM-Iq-rjN" secondAttribute="leadingMargin" constant="-16" id="C3S-eJ-Uyj"/>
+                            <constraint firstItem="X0I-ok-GYd" firstAttribute="top" secondItem="G7o-jY-7Ut" secondAttribute="bottom" id="G5X-Ab-BSn"/>
+                            <constraint firstItem="G7o-jY-7Ut" firstAttribute="top" secondItem="75M-Ds-3KO" secondAttribute="bottom" constant="-64" id="LVd-Al-vvN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="G7o-jY-7Ut" secondAttribute="trailing" constant="-16" id="MBC-tc-Lfz"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="G7o-jY-7Ut" id="Ogk-Gi-DDR"/>
